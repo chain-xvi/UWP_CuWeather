@@ -86,7 +86,19 @@ namespace WeatherAppUnitTestDemo
                     case GeolocationAccessStatus.Allowed:
                         Geolocator geolocator = new Geolocator() { DesiredAccuracyInMeters = 1, MovementThreshold = 10 };
                         Geoposition geoposition = await geolocator.GetGeopositionAsync();
-                        rootObject = await WebAPIServiceCall.CallWeatherAPIAsync(Convert.ToDouble(geoposition.Coordinate.Longitude), Convert.ToDouble(geoposition.Coordinate.Latitude));
+
+                        (double lon, double lat) coords = (geoposition.Coordinate.Longitude, geoposition.Coordinate.Latitude);
+
+
+                        rootObject = await WebAPIServiceCall.CallWeatherAPIAsync(coords.lon, coords.lat);
+
+                        FiveDaysWeatherRootObject fiveDaysWeatherRootObject = await FiveDaysWeatherApiWebCallService.GetFiveDaysWeatherAsync(coords.lon, coords.lat);
+
+
+                        // TODO: Monitor and gather the five days weather from the object!
+
+
+
                         if (rootObject != null)
                         {
                             UpdateWeatherControls();
@@ -122,6 +134,8 @@ namespace WeatherAppUnitTestDemo
             {
                 FahrenheitToggleButton.IsChecked = true;
             }
+
+            
 
 
         }

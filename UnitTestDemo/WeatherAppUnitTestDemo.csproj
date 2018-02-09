@@ -101,8 +101,10 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\FiveDaysWeatherRootObject.cs" />
     <Compile Include="Models\RootObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\FiveDaysWeatherApiWebCallService.cs" />
     <Compile Include="Services\WeatherStorageService.cs" />
     <Compile Include="Services\WebAPIServiceCall.cs" />
   </ItemGroup>
