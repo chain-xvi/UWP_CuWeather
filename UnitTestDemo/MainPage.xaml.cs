@@ -18,6 +18,7 @@ using Windows.Devices.Geolocation;
 using Windows.UI.Xaml.Navigation;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
+using System.Collections.ObjectModel;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -34,13 +35,15 @@ namespace WeatherAppUnitTestDemo
         private RootObject rootObject;
         private GeolocationAccessStatus accessStatus;
         private DispatcherTimer dispatcherTimer;
+        private ObservableCollection<DailyWeather> dailyWeatherObservableCollection;
 
         public MainPage()
         {
             this.InitializeComponent();
+            dailyWeatherObservableCollection = new ObservableCollection<DailyWeather>();
 
             dispatcherTimer = new DispatcherTimer();
-            dispatcherTimer.Interval = new TimeSpan(0,0,60);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 60);
             dispatcherTimer.Start();
             dispatcherTimer.Tick += DispatcherTimer_Tick;
         }
@@ -60,8 +63,6 @@ namespace WeatherAppUnitTestDemo
             {
                 //Still not set to an instance.
             }
-
-            
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
@@ -90,19 +91,32 @@ namespace WeatherAppUnitTestDemo
                         (double lon, double lat) coords = (geoposition.Coordinate.Longitude, geoposition.Coordinate.Latitude);
 
 
+
                         rootObject = await WebAPIServiceCall.CallWeatherAPIAsync(coords.lon, coords.lat);
 
                         FiveDaysWeatherRootObject fiveDaysWeatherRootObject = await FiveDaysWeatherApiWebCallService.GetFiveDaysWeatherAsync(coords.lon, coords.lat);
 
-
                         // TODO: Monitor and gather the five days weather from the object!
-
 
 
                         if (rootObject != null)
                         {
                             UpdateWeatherControls();
                             await WeatherStorageService.SaveWeatherToFileAsync(rootObject);
+                        }
+
+                        if (fiveDaysWeatherRootObject != null)
+                        {
+                            List<DailyWeather> list = new List<DailyWeather>();
+                            list = await GetDailyWeather.GetDailyWeatherAsync(fiveDaysWeatherRootObject);
+                            GettingWeatherInformation.ConvertFiveDaysTemperatureToCelsius(list);
+
+                            Parallel.ForEach(list, (item) => { item.High = Math.Round(item.High, 0); });
+
+                            foreach (var item in list)
+                            {
+                                dailyWeatherObservableCollection.Add(item);
+                            }
                         }
                         break;
                     case GeolocationAccessStatus.Denied:
@@ -135,7 +149,7 @@ namespace WeatherAppUnitTestDemo
                 FahrenheitToggleButton.IsChecked = true;
             }
 
-            
+
 
 
         }

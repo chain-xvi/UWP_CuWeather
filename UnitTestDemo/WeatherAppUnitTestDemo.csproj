@@ -95,12 +95,14 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\GetDailyWeather.cs" />
     <Compile Include="Helpers\GettingWeatherInformation.cs" />
     <Compile Include="Helpers\InternetAvailabilityCheckHelper.cs" />
     <Compile Include="Helpers\TemperatureUnitsConverter.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\DailyWeather.cs" />
     <Compile Include="Models\FiveDaysWeatherRootObject.cs" />
     <Compile Include="Models\RootObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

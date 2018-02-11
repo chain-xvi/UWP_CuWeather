@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -56,5 +57,9 @@ namespace WeatherAppUnitTestDemo.Helpers
             (rootObject.dateTime.Date.ToString("MM/dd/yyyy"), rootObject.dateTime.Date.DayOfWeek.ToString().ToUpper());
 
         internal static string GetWeatherUpdateTime(RootObject rootObject) => rootObject.dateTime.DateTime.ToString("HH:mm");
+
+        internal static void ConvertFiveDaysTemperatureToCelsius(List<DailyWeather> collection) => Parallel.ForEach(collection, (item)=> {
+            item.High = TemperatureUnitsConverter.GetTemperatureBasedOnUnit(item.High);
+        });
     }
 }

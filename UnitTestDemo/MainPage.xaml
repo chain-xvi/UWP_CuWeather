@@ -5,6 +5,7 @@
     xmlns:local="using:WeatherAppUnitTestDemo"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:m="using:WeatherAppUnitTestDemo.Models"
     mc:Ignorable="d"
     Background="{ThemeResource SystemControlAccentAcrylicWindowAccentMediumHighBrush}">
 
@@ -15,7 +16,7 @@
         </Grid.RowDefinitions>
 
         <ProgressRing Name="LoadingProgressRing" Grid.Row="1" IsActive="True" Width="100" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center"></ProgressRing>
-            
+
         <ScrollViewer Grid.Row="1" IsScrollInertiaEnabled="True" IsVerticalScrollChainingEnabled="True" HorizontalScrollBarVisibility="Disabled" HorizontalScrollMode="Disabled" VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -29,8 +30,8 @@
                     <Image Name="WeatherIconImage" Margin="0,30,0,0" Width="128" Height="128"/>
                     <TextBlock Foreground="White" Name="DescriptionTextBlock" TextAlignment="Center" HorizontalAlignment="Right" FontFamily="Segoe UI" FontWeight="Light" FontStyle="Italic" Margin="0,0,5,0" FontSize="19"/>
 
-                    <StackPanel Orientation="Horizontal" Margin="0,25,0,0">
-                        <TextBlock Foreground="White" Name="TemperatureTextBlock" Margin="72,0,0,0" FontFamily="Segoe UI" FontSize="80" TextAlignment="Center" FontWeight="ExtraLight" />
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,25,0,0">
+                        <TextBlock Foreground="White" Name="TemperatureTextBlock" Margin="20,0,0,0" FontFamily="Segoe UI" FontSize="80" TextAlignment="Center" FontWeight="ExtraLight" />
                         <TextBlock Foreground="White" Visibility="Collapsed" Name="TheDegreeSymbol" Text="°" FontFamily="Segoe UI" FontSize="80" FontWeight="ExtraLight"/>
 
                         <!--<StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10,0,0,5" Orientation="Vertical">
@@ -53,6 +54,26 @@
                         <TextBlock HorizontalAlignment="Center" TextAlignment="Center" Name="UpdatedDateTextBlock" Foreground="White" FontFamily="Segoe UI" FontWeight="Light" FontSize="11"/>
                         <TextBlock HorizontalAlignment="Center" TextAlignment="Center" Name="UpdatedTimeTextBlock" Foreground="White" FontFamily="Segoe UI" FontWeight="Light" FontSize="12"/>
                     </StackPanel>
+
+                    <ScrollViewer ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.IsHorizontalRailEnabled="True">
+                        <ListView x:Name="FiveDaysWeatherListView" Margin="0,140,0,0" IsHitTestVisible="False" ItemsSource="{x:Bind dailyWeatherObservableCollection}" >
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="m:DailyWeather">
+                                    <StackPanel Width="150" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <TextBlock TextAlignment="Center" Name="DayTextBlock" Text="{x:Bind Day}" FontFamily="Segoe UI" FontWeight="SemiLight" FontSize="15" CharacterSpacing="70" Foreground="White"></TextBlock>
+                                        <!--<Image Name="WeatherImage"></Image>-->
+                                        <TextBlock TextAlignment="Center" Name="HighTemperatureTextBlock" Margin="0,20,0,0" Text="{x:Bind High}"  FontFamily="Segoe UI" FontWeight="SemiLight" FontSize="18" CharacterSpacing="50" Foreground="White"></TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </ScrollViewer>
+
                 </StackPanel>
 
                 <StackPanel Name="TemperatueToggleButtonsContainerStackPanel" Visibility="Collapsed" HorizontalAlignment="Left" Orientation="Horizontal" VerticalAlignment="Top" Margin="-30,20,0,0" Grid.Column="2">
@@ -64,5 +85,5 @@
         </ScrollViewer>
     </Grid>
 
-    
+
 </Page>
