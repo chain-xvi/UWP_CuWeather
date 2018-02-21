@@ -249,8 +249,6 @@ namespace WeatherAppUnitTestDemo
             UpdateWeatherControls();
 
 
-
-
             List<DailyWeather> list = new List<DailyWeather>();
 
             list = await GettingDailyWeather.GetDailyWeatherAsync(fiveDaysWeatherRootObject);

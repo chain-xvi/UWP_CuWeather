@@ -117,6 +117,7 @@
     <None Include="UnitTestDemo_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Screenshot %281644%29.png" />
     <Content Include="Assets\WeatherIcons\clouds_weather_cloud_4496[1].png" />
     <Content Include="Assets\WeatherIcons\Weather-Little-Rain-icon[3].png" />
     <Content Include="Assets\WeatherIcons\Weather-Moon-icon[2].png" />
