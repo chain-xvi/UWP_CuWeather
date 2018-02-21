@@ -95,7 +95,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\GetDailyWeather.cs" />
+    <Compile Include="Helpers\GettingDailyWeather.cs" />
     <Compile Include="Helpers\GettingWeatherInformation.cs" />
     <Compile Include="Helpers\InternetAvailabilityCheckHelper.cs" />
     <Compile Include="Helpers\TemperatureUnitsConverter.cs" />

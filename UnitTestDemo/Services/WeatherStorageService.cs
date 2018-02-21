@@ -53,6 +53,22 @@ namespace WeatherAppUnitTestDemo.Services
             return GetTFromJson<T>(weatherAsJson);
         }
 
+        internal async static Task SaveFiveDaysWeatherAsync(FiveDaysWeatherRootObject fiveDaysWeatherRootObject)
+        {
+            await Task.Run(async() => {
+                StorageFile storageFile = await localStorageFolder.CreateFileAsync("FiveDays.json", CreationCollisionOption.ReplaceExisting);
+                await FileIO.WriteTextAsync(storageFile, SerializeToJson(fiveDaysWeatherRootObject));
+            });
+            await Task.CompletedTask;
+        }
+
+        internal async static Task<T> ReadFiveDaysWeatherAsync<T>()
+        {
+            StorageFile storageFile = await localStorageFolder.GetFileAsync("FiveDays.json");
+            string weatherAsJson = await FileIO.ReadTextAsync(storageFile);
+            return GetTFromJson<T>(weatherAsJson);
+        }
+
         private static string SerializeToJson(object o)
         {
             if (o == null)

@@ -33,6 +33,7 @@ namespace WeatherAppUnitTestDemo
     public sealed partial class MainPage : Page
     {
         private RootObject rootObject;
+        FiveDaysWeatherRootObject fiveDaysWeatherRootObject;
         private GeolocationAccessStatus accessStatus;
         private DispatcherTimer dispatcherTimer;
         private ObservableCollection<DailyWeather> dailyWeatherObservableCollection;
@@ -94,7 +95,7 @@ namespace WeatherAppUnitTestDemo
 
                         rootObject = await WebAPIServiceCall.CallWeatherAPIAsync(coords.lon, coords.lat);
 
-                        FiveDaysWeatherRootObject fiveDaysWeatherRootObject = await FiveDaysWeatherApiWebCallService.GetFiveDaysWeatherAsync(coords.lon, coords.lat);
+                        fiveDaysWeatherRootObject = await FiveDaysWeatherApiWebCallService.GetFiveDaysWeatherAsync(coords.lon, coords.lat);
 
                         // TODO: Monitor and gather the five days weather from the object!
 
@@ -107,9 +108,11 @@ namespace WeatherAppUnitTestDemo
 
                         if (fiveDaysWeatherRootObject != null)
                         {
+                            await WeatherStorageService.SaveFiveDaysWeatherAsync(fiveDaysWeatherRootObject);
+
                             List<DailyWeather> list = new List<DailyWeather>();
-                            list = await GetDailyWeather.GetDailyWeatherAsync(fiveDaysWeatherRootObject);
-                            GettingWeatherInformation.ConvertFiveDaysTemperatureToCelsius(list);
+                            list = await GettingDailyWeather.GetDailyWeatherAsync(fiveDaysWeatherRootObject);
+                            list = GettingWeatherInformation.GetFiveDaysTemperature(list);
 
                             Parallel.ForEach(list, (item) => { item.High = Math.Round(item.High, 0); });
 
@@ -128,6 +131,11 @@ namespace WeatherAppUnitTestDemo
                 try
                 {
                     rootObject = await WeatherStorageService.ReadWeatherFromFileAsync<RootObject>();
+                    fiveDaysWeatherRootObject = await WeatherStorageService.ReadFiveDaysWeatherAsync<FiveDaysWeatherRootObject>();
+                    
+                    //TODO get the retrieved five days weather...
+
+
                 }
                 catch (Exception)
                 {
@@ -137,6 +145,28 @@ namespace WeatherAppUnitTestDemo
                 if (rootObject != null)
                 {
                     UpdateWeatherControls();
+                }
+                else
+                {
+                    // TODO display internet is required...
+                }
+
+                if (fiveDaysWeatherRootObject != null)
+                {
+                    List<DailyWeather> list = new List<DailyWeather>();
+                    list = await GettingDailyWeather.GetDailyWeatherAsync(fiveDaysWeatherRootObject);
+                    list = GettingWeatherInformation.GetFiveDaysTemperature(list);
+
+                    Parallel.ForEach(list, (item) => { item.High = Math.Round(item.High, 0); });
+
+                    foreach (var item in list)
+                    {
+                        dailyWeatherObservableCollection.Add(item);
+                    }
+                }
+                else
+                {
+
                 }
             }
 
@@ -188,6 +218,25 @@ namespace WeatherAppUnitTestDemo
 
             App.IsUnitCelcius = true;
             UpdateWeatherControls();
+            
+            
+
+            List<DailyWeather> list = new List<DailyWeather>();
+
+            list = await GettingDailyWeather.GetDailyWeatherAsync(fiveDaysWeatherRootObject);
+
+            list = GettingWeatherInformation.GetFiveDaysTemperature(list);
+
+            Parallel.ForEach(list, (item) => { item.High = Math.Round(item.High, 0); });
+
+            dailyWeatherObservableCollection = new ObservableCollection<DailyWeather>();
+
+            FiveDaysWeatherListView.ItemsSource = dailyWeatherObservableCollection;
+            foreach (var item in list)
+            {
+                dailyWeatherObservableCollection.Add(item);
+            }
+
             await WeatherStorageService.SaveTemperatureUnitToFileAsync(App.IsUnitCelcius);
         }
 
@@ -198,6 +247,28 @@ namespace WeatherAppUnitTestDemo
 
             App.IsUnitCelcius = false;
             UpdateWeatherControls();
+
+
+
+
+            List<DailyWeather> list = new List<DailyWeather>();
+
+            list = await GettingDailyWeather.GetDailyWeatherAsync(fiveDaysWeatherRootObject);
+
+            list = GettingWeatherInformation.GetFiveDaysTemperature(list);
+
+            Parallel.ForEach(list, (item) => { item.High = Math.Round(item.High, 0); });
+
+            dailyWeatherObservableCollection = new ObservableCollection<DailyWeather>();
+
+            FiveDaysWeatherListView.ItemsSource = dailyWeatherObservableCollection;
+            foreach (var item in list)
+            {
+                dailyWeatherObservableCollection.Add(item);
+            }
+
+
+
             await WeatherStorageService.SaveTemperatureUnitToFileAsync(App.IsUnitCelcius);
         }
 
@@ -210,6 +281,24 @@ namespace WeatherAppUnitTestDemo
             CelciusToggleButton.IsChecked = true;
             App.IsUnitCelcius = true;
             UpdateWeatherControls();
+
+            
+            List<DailyWeather> list = new List<DailyWeather>();
+
+            list = await GettingDailyWeather.GetDailyWeatherAsync(fiveDaysWeatherRootObject);
+
+            list = GettingWeatherInformation.GetFiveDaysTemperature(list);
+
+            Parallel.ForEach(list, (item) => { item.High = Math.Round(item.High, 0); });
+
+            dailyWeatherObservableCollection = new ObservableCollection<DailyWeather>();
+
+            FiveDaysWeatherListView.ItemsSource = dailyWeatherObservableCollection;
+            foreach (var item in list)
+            {
+                dailyWeatherObservableCollection.Add(item);
+            }
+
             await WeatherStorageService.SaveTemperatureUnitToFileAsync(App.IsUnitCelcius);
         }
 
@@ -221,6 +310,26 @@ namespace WeatherAppUnitTestDemo
             await Task.Delay(100);
             FahrenheitToggleButton.IsChecked = true;
             UpdateWeatherControls();
+
+
+            // TODO: take a look for the days list!!
+
+            List<DailyWeather> list = new List<DailyWeather>();
+
+            list = await GettingDailyWeather.GetDailyWeatherAsync(fiveDaysWeatherRootObject);
+
+            list = GettingWeatherInformation.GetFiveDaysTemperature(list);
+
+            Parallel.ForEach(list, (item) => { item.High = Math.Round(item.High, 0); });
+
+            dailyWeatherObservableCollection = new ObservableCollection<DailyWeather>();
+
+            FiveDaysWeatherListView.ItemsSource = dailyWeatherObservableCollection;
+            foreach (var item in list)
+            {
+                dailyWeatherObservableCollection.Add(item);
+            }
+
             await WeatherStorageService.SaveTemperatureUnitToFileAsync(App.IsUnitCelcius);
         }
     }

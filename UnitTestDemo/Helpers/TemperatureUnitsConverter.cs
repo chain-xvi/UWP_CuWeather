@@ -10,7 +10,6 @@ namespace WeatherAppUnitTestDemo.Helpers
     {
         internal static double GetTemperatureBasedOnUnit(double temp)
         {
-            temp -= 273;
             if (App.IsUnitCelcius)
                 return temp;
             else

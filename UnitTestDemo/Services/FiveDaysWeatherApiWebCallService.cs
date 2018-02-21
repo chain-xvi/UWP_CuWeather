@@ -21,6 +21,7 @@ namespace WeatherAppUnitTestDemo.Services
                 HttpResponseMessage message = await client.GetAsync("http://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=035a9b9c1ad756225aee214f122f2036");
                 string response = await message.Content.ReadAsStringAsync();
                 FiveDaysWeatherRootObject rootObject = JsonConvert.DeserializeObject<FiveDaysWeatherRootObject>(response) as FiveDaysWeatherRootObject;
+
                 return rootObject;
             }
             catch (Exception)

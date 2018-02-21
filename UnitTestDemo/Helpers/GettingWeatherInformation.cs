@@ -13,12 +13,12 @@ namespace WeatherAppUnitTestDemo.Helpers
         internal static string GetCity(RootObject rootObject) => rootObject.name;
 
         internal static string GetTemperature(RootObject rootObject) =>
-            TemperatureUnitsConverter.GetTemperatureBasedOnUnit(Math.Truncate(rootObject.main.temp)).ToString();
+            TemperatureUnitsConverter.GetTemperatureBasedOnUnit(Math.Truncate(rootObject.main.temp - 273)).ToString();
 
         internal static string GetWeatherDescription(RootObject rootObject) => rootObject.weather[0].description;
 
         internal static (string maxTemp, string minTemp) GetMaxAndMin(RootObject rootObject) =>
-            (TemperatureUnitsConverter.GetTemperatureBasedOnUnit(rootObject.main.temp).ToString(), (rootObject.main.temp_min - 273.15).ToString());
+            (TemperatureUnitsConverter.GetTemperatureBasedOnUnit(rootObject.main.temp - 273).ToString(), (rootObject.main.temp_min - 273).ToString());
 
         internal static string GetIconSource(RootObject rootObject)
         {
@@ -58,8 +58,14 @@ namespace WeatherAppUnitTestDemo.Helpers
 
         internal static string GetWeatherUpdateTime(RootObject rootObject) => rootObject.dateTime.DateTime.ToString("HH:mm");
 
-        internal static void ConvertFiveDaysTemperatureToCelsius(List<DailyWeather> collection) => Parallel.ForEach(collection, (item)=> {
-            item.High = TemperatureUnitsConverter.GetTemperatureBasedOnUnit(item.High);
-        });
+        internal static List<DailyWeather> GetFiveDaysTemperature(List<DailyWeather> collection)
+         {
+            foreach (var item in collection)
+            {
+                item.High = TemperatureUnitsConverter.GetTemperatureBasedOnUnit(item.High);
+            }
+
+            return collection;
+        }
     }
 }

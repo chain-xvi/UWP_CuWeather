@@ -58,19 +58,19 @@ namespace WeatherAppUnitTestDemo.Models
         public Main Main { get; set; }
 
         [JsonProperty("weather")]
-        public List<Weather> Weather { get; set; }
+        public List<Weather2> Weather { get; set; }
 
         [JsonProperty("clouds")]
-        public Clouds Clouds { get; set; }
+        public Clouds2 Clouds { get; set; }
 
         [JsonProperty("wind")]
-        public Wind Wind { get; set; }
+        public Wind2 Wind { get; set; }
 
         [JsonProperty("snow")]
         public Snow Snow { get; set; }
 
         [JsonProperty("sys")]
-        public Sys Sys { get; set; }
+        public Sys2 Sys { get; set; }
 
         [JsonProperty("dt_txt")]
         public System.DateTime DtTxt { get; set; }
