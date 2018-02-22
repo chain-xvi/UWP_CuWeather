@@ -1,5 +1,8 @@
- # UWP_CuWeather
+# UWP_CuWeather
 The is a UWP Weather App [in DEVELOPMENT] about weather information in a super minimal way this is a pretty fun project, Wanna collaborate?
+
+![ScreenShot as of 02/21/2018](https://github.com/iamanas20/UWP_CuWeather/blob/master/UnitTestDemo/Assets/Screenshot%20(1644).png)
+
 
 # How is the app now?
 the CuWeather is still in development (as of 02/04/2018), this screenshot illustrates to you where it currently is:
