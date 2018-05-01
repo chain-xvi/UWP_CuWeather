@@ -15,9 +15,7 @@ namespace WeatherAppUnitTestDemo.Helpers
 
             foreach (var item in fiveDaysWeatherRootObject.List)
             {
-
                 DailyWeather daily = new DailyWeather();
-
                 if (dailyWeather.Count != 0)
                 {
                     if (dailyWeather.Last().Day != Convert.ToDateTime(item.DtTxt).ToString("dddd"))
@@ -25,10 +23,7 @@ namespace WeatherAppUnitTestDemo.Helpers
                         daily.Day = Convert.ToDateTime(item.DtTxt).ToString("dddd");
                         daily.High = item.Main.temp_max;
 
-
-
                         daily.ImageUrl = await GetImageURL(item.Weather[0].Description, item.Weather[0].Icon);
-
 
                         dailyWeather.Add(daily);
                     }
@@ -45,19 +40,11 @@ namespace WeatherAppUnitTestDemo.Helpers
                     daily.Day = Convert.ToDateTime(item.DtTxt).ToString("dddd");
                     daily.High = item.Main.temp_max;
 
-
                     daily.ImageUrl = await GetImageURL(item.Weather[0].Description, item.Weather[0].Icon);
 
                     dailyWeather.Add(daily);
                 }
-
-
-
-
-
-
             }
-
 
             // Get five days not four
 
@@ -67,10 +54,8 @@ namespace WeatherAppUnitTestDemo.Helpers
             }
 
             Parallel.ForEach(dailyWeather, (item) => { item.High -= 273; });
-
-
+            
             // Assign images
-
 
 
             return dailyWeather;
@@ -87,6 +72,7 @@ namespace WeatherAppUnitTestDemo.Helpers
                     case "thunderstorm":
                         return "Assets/WeatherIcons/Weather-Storm-icon[2].png";
                     case "shower rain":
+                    case "light rain":
                         return "Assets/WeatherIcons/Weather-Little-Rain-icon[3].png";
                     case "rain":
                         return "Assets/WeatherIcons/Weather-Partly-Cloudy-Rain-icon[2].png";
@@ -94,10 +80,7 @@ namespace WeatherAppUnitTestDemo.Helpers
                         return "Assets/WeatherIcons/Weather-Snow-icon[2].png";
                     case "Atmosphere":
                     case "clear sky":
-                        if (icon.Contains("d"))
-                            return "Assets/WeatherIcons/Weather-Sun-icon[1].png";
-                        else
-                            return "Assets/WeatherIcons/Weather-Moon-icon[2].png";
+                        return "Assets/WeatherIcons/Weather-Sun-icon[1].png";
                     case "clouds":
                     case "few clouds":
                     case "scattered clouds":

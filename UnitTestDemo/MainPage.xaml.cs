@@ -19,6 +19,7 @@ using Windows.UI.Xaml.Navigation;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Collections.ObjectModel;
+using Windows.ApplicationModel.Background;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -68,6 +69,9 @@ namespace WeatherAppUnitTestDemo
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+
+            this.RegisterBackgroundTask();
+
             try
             {
                 App.IsUnitCelcius = await WeatherStorageService.ReadTemperatureUnitFromFileAsync<bool>();
@@ -121,6 +125,11 @@ namespace WeatherAppUnitTestDemo
                                 dailyWeatherObservableCollection.Add(item);
                             }
                         }
+
+                        // Save coords for the live tile
+
+                        await CoordsStorageService.StoreCoords(coords);
+
                         break;
                     case GeolocationAccessStatus.Denied:
                         break;
@@ -132,7 +141,7 @@ namespace WeatherAppUnitTestDemo
                 {
                     rootObject = await WeatherStorageService.ReadWeatherFromFileAsync<RootObject>();
                     fiveDaysWeatherRootObject = await WeatherStorageService.ReadFiveDaysWeatherAsync<FiveDaysWeatherRootObject>();
-                    
+
                     //TODO get the retrieved five days weather...
 
 
@@ -178,10 +187,6 @@ namespace WeatherAppUnitTestDemo
             {
                 FahrenheitToggleButton.IsChecked = true;
             }
-
-
-
-
         }
 
         private void UpdateWeatherControls()
@@ -218,8 +223,8 @@ namespace WeatherAppUnitTestDemo
 
             App.IsUnitCelcius = true;
             UpdateWeatherControls();
-            
-            
+
+
 
             List<DailyWeather> list = new List<DailyWeather>();
 
@@ -280,7 +285,7 @@ namespace WeatherAppUnitTestDemo
             App.IsUnitCelcius = true;
             UpdateWeatherControls();
 
-            
+
             List<DailyWeather> list = new List<DailyWeather>();
 
             list = await GettingDailyWeather.GetDailyWeatherAsync(fiveDaysWeatherRootObject);
@@ -330,5 +335,31 @@ namespace WeatherAppUnitTestDemo
 
             await WeatherStorageService.SaveTemperatureUnitToFileAsync(App.IsUnitCelcius);
         }
+
+        private async void RegisterBackgroundTask()
+        {
+            var backgroundAccessStatus = await BackgroundExecutionManager.RequestAccessAsync();
+            if (backgroundAccessStatus == BackgroundAccessStatus.AlwaysAllowed ||
+                backgroundAccessStatus == BackgroundAccessStatus.AlwaysAllowed)
+            {
+                foreach (var task in BackgroundTaskRegistration.AllTasks)
+                {
+                    if (task.Value.Name == taskName)
+                    {
+                        task.Value.Unregister(true);
+                    }
+                }
+
+                BackgroundTaskBuilder taskBuilder = new BackgroundTaskBuilder();
+                taskBuilder.Name = taskName;
+                taskBuilder.TaskEntryPoint = taskEntryPoint;
+                taskBuilder.SetTrigger(new TimeTrigger(15, false));
+                var registration = taskBuilder.Register();
+            }
+        }
+
+        private const string taskName = "BackgroundTaskLiveTile";
+        private const string taskEntryPoint = "BackgroundTaskLiveTile.BackgroundTaskLiveTile";
+
     }
 }
